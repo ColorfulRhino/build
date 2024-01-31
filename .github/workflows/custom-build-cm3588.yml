@@ -1,0 +1,29 @@
+name: custom-build-cm3588
+run-name: ${{ github.actor }} is building an Armbian image for Friendlyelec CM3588
+on:
+  push:
+    branches:
+      - 'Try-mainline-compatibility'
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+        type: choice
+        options:
+        - info
+        - warning
+        - debug
+
+jobs:
+  build-img:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: git config --global --add safe.directory /armbian/cache/git-bare/shallow-kernel-6.8
+      - run: git config --global --add safe.directory /armbian/cache/*
+      - run: git config --global --list
+      - run: sudo git config --system --add safe.directory /armbian/cache/git-bare/shallow-kernel-6.8
+      - run: sudo git config --system --list
+      - run: ./compile.sh build BOARD=nanopi-cm3588-nas BRANCH=edge BUILD_DESKTOP=no BUILD_MINIMAL=no KERNEL_CONFIGURE=no RELEASE=bookworm
