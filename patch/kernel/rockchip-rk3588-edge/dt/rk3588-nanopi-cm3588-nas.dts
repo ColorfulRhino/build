@@ -36,14 +36,14 @@
 		};
 	};
 
-	dp0_sound: dp0-sound {
-		status = "okay";
-		compatible = "rockchip,hdmi";
-		rockchip,card-name= "rockchip,dp0";
-		rockchip,mclk-fs = <512>;
-		rockchip,cpu = <&spdif_tx2>;
-		rockchip,codec = <&dp0 1>;
-	};
+	// dp0_sound: dp0-sound {
+	// 	status = "okay";
+	// 	compatible = "rockchip,hdmi";
+	// 	rockchip,card-name= "rockchip,dp0";
+	// 	rockchip,mclk-fs = <512>;
+	// 	rockchip,cpu = <&spdif_tx2>;
+	// 	rockchip,codec = <&dp0 1>;
+	// };
 
 	rt5616_sound: rt5616-sound {
 		status = "okay";
@@ -137,27 +137,27 @@
 		};
 	};
 
-	hdmi1_sound: hdmi1-sound {
-		status = "disabled";
-		compatible = "rockchip,hdmi";
-		rockchip,mclk-fs = <128>;
-		rockchip,card-name = "rockchip,hdmi1";
-		rockchip,cpu = <&i2s6_8ch>;
-		rockchip,codec = <&hdmi1>;
-	};
+	// hdmi1_sound: hdmi1-sound {
+	// 	status = "disabled";
+	// 	compatible = "rockchip,hdmi";
+	// 	rockchip,mclk-fs = <128>;
+	// 	rockchip,card-name = "rockchip,hdmi1";
+	// 	rockchip,cpu = <&i2s6_8ch>;
+	// 	rockchip,codec = <&hdmi1>;
+	// };
 
-	hdmiin_sound: hdmiin-sound {
-		status = "disabled";
-		compatible = "rockchip,hdmi";
-		rockchip,mclk-fs = <128>;
-		rockchip,format = "i2s";
-		rockchip,bitclock-master = <&hdmirx_ctrler>;
-		rockchip,frame-master = <&hdmirx_ctrler>;
-		rockchip,card-name = "rockchip,hdmiin";
-		rockchip,cpu = <&i2s7_8ch>;
-		rockchip,codec = <&hdmirx_ctrler 0>;
-		rockchip,jack-det;
-	};
+	// hdmiin_sound: hdmiin-sound {
+	// 	status = "disabled";
+	// 	compatible = "rockchip,hdmi";
+	// 	rockchip,mclk-fs = <128>;
+	// 	rockchip,format = "i2s";
+	// 	rockchip,bitclock-master = <&hdmirx_ctrler>;
+	// 	rockchip,frame-master = <&hdmirx_ctrler>;
+	// 	rockchip,card-name = "rockchip,hdmiin";
+	// 	rockchip,cpu = <&i2s7_8ch>;
+	// 	rockchip,codec = <&hdmirx_ctrler 0>;
+	// 	rockchip,jack-det;
+	// };
 
 	vcc5v0_host_30: vcc5v0-host-30 {
 		compatible = "regulator-fixed";
@@ -218,25 +218,25 @@
 	status = "okay";
 };
 
-&dp0 {
-	status = "okay";
-};
+// &dp0 {
+// 	status = "okay";
+// };
 
-&dp0_in_vp0 {
-	status = "disabled";
-};
+// &dp0_in_vp0 {
+// 	status = "disabled";
+// };
 
-&dp0_in_vp1 {
-	status = "disabled";
-};
+// &dp0_in_vp1 {
+// 	status = "disabled";
+// };
 
-&dp0_in_vp2 {
-	status = "okay";
-};
+// &dp0_in_vp2 {
+// 	status = "okay";
+// };
 
-&dp0_sound {
-	status = "okay";
-};
+// &dp0_sound {
+// 	status = "okay";
+// };
 
 &gmac1 {
 	status = "disabled";
@@ -247,67 +247,67 @@
 	status = "okay";
 };
 
-&hdmi0_in_vp0 {
-	status = "okay";
-};
+// &hdmi0_in_vp0 {
+// 	status = "okay";
+// };
 
-&hdmi0_in_vp1 {
-	status = "disabled";
-};
+// &hdmi0_in_vp1 {
+// 	status = "disabled";
+// };
 
-&hdmi0_in_vp2 {
-	status = "disabled";
-};
+// &hdmi0_in_vp2 {
+// 	status = "disabled";
+// };
 
 &hdmi0_sound {
 	status = "okay";
 };
 
-&hdmi1 {
-	enable-gpios = <&gpio4 RK_PB2 GPIO_ACTIVE_HIGH>;
-	status = "okay";
-};
+// &hdmi1 {
+// 	enable-gpios = <&gpio4 RK_PB2 GPIO_ACTIVE_HIGH>;
+// 	status = "okay";
+// };
 
-&hdmi1_in_vp0 {
-	status = "disabled";
-};
+// &hdmi1_in_vp0 {
+// 	status = "disabled";
+// };
 
-&hdmi1_in_vp1 {
-	status = "okay";
-};
+// &hdmi1_in_vp1 {
+// 	status = "okay";
+// };
 
-&hdmi1_in_vp2 {
-	status = "disabled";
-};
+// &hdmi1_in_vp2 {
+// 	status = "disabled";
+// };
 
-&hdmi1_sound {
-	status = "okay";
-};
+// &hdmi1_sound {
+// 	status = "okay";
+// };
 
-&hdmiin_sound {
-	status = "okay";
-};
+// &hdmiin_sound {
+// 	status = "okay";
+// };
 
 /* Should work with at least 128MB cma reserved above. */
-&hdmirx_ctrler {
-	status = "okay";
+// &hdmirx_ctrler {
+// 	status = "okay";
 
-	#sound-dai-cells = <1>;
-	edid-version = <3>;
-	/* Effective level used to trigger HPD: 0-low, 1-high */
-	hpd-trigger-level = <1>;
-	hdmirx-det-gpios = <&gpio1 RK_PD5 GPIO_ACTIVE_LOW>;
-	pinctrl-names = "default";
-	pinctrl-0 = <&hdmim1_rx &hdmirx_det>;
-};
+// 	#sound-dai-cells = <1>;
+// 	edid-version = <3>;
+// 	/* Effective level used to trigger HPD: 0-low, 1-high */
+// 	hpd-trigger-level = <1>;
+// 	hdmirx-det-gpios = <&gpio1 RK_PD5 GPIO_ACTIVE_LOW>;
+// 	pinctrl-names = "default";
+// 	pinctrl-0 = <&hdmim1_rx &hdmirx_det>;
+// };
 
 &hdptxphy_hdmi0 {
 	status = "okay";
 };
 
-&hdptxphy_hdmi1 {
-	status = "okay";
-};
+// &hdptxphy_hdmi1 {
+// 	status = "okay";
+// };
 
 &i2c5 {
 	pinctrl-0 = <&i2c5m0_xfer>;
@@ -403,17 +403,20 @@
 	clock-frequency = <200000>;
 	status = "okay";
 
-	rt5616: rt5616@1b {
-		status = "okay";
-		#sound-dai-cells = <0>;
-		compatible = "rt5616";
+	rt5616: codec@1b {
+		compatible = "realtek,rt5616";
 		reg = <0x1b>;
-		clocks = <&mclkout_i2s0>;
+		clocks = <&cru I2S0_8CH_MCLKOUT>;
 		clock-names = "mclk";
-		assigned-clocks = <&mclkout_i2s0>;
+		#sound-dai-cells = <0>;
+		assigned-clocks = <&cru I2S0_8CH_MCLKOUT>;
 		assigned-clock-rates = <12288000>;
-		pinctrl-names = "default";
-		pinctrl-0 = <&i2s0_mclk>;
+
+		port {
+			rt5616_p0_0: endpoint {
+				remote-endpoint = <&i2s0_8ch_p0_0>;
+			};
+		};
 	};
 
 	/* connected with MIPI-CSI1 */
@@ -425,12 +428,21 @@
 };
 
 &i2s0_8ch {
-	status = "okay";
+	pinctrl-names = "default";
 	pinctrl-0 = <&i2s0_lrck
+		     &i2s0_mclk
 		     &i2s0_sclk
 		     &i2s0_sdi0
 		     &i2s0_sdo0>;
-	rockchip,trcm-sync-tx-only;
+	status = "okay";
+
+	i2s0_8ch_p0: port {
+		i2s0_8ch_p0_0: endpoint {
+			dai-format = "i2s";
+			mclk-fs = <256>;
+			remote-endpoint = <&rt5616_p0_0>;
+		};
+	};
 };
 
 &i2s6_8ch {
@@ -508,7 +520,7 @@
 };
 
 &pcie30phy {
-	rockchip,pcie30-phymode = <PHY_MODE_PCIE_NABIBI>;
+	// rockchip,pcie30-phymode = <PHY_MODE_PCIE_NABIBI>;
 	status = "okay";
 };
 
@@ -639,9 +651,9 @@
 	status = "okay";
 };
 
-&spdif_tx2 {
-	status = "okay";
-};
+// &spdif_tx2 {
+// 	status = "okay";
+// };
 
 &u2phy0 {
 	status = "okay";
