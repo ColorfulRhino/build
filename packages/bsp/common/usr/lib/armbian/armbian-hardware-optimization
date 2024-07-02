@@ -130,7 +130,7 @@ prepare_board() {
 			done
 			echo 2 > /proc/irq/$(awk -F":" "/xhci-hcd/ {print \$1}" < /proc/interrupts | sed 's/\ //g')/smp_affinity_list
 			echo 3 > /proc/irq/$(awk -F":" "/eth0/ {print \$1}" < /proc/interrupts | sed 's/\ //g')/smp_affinity_list
-			# mainline kernel might lack those
+
 			[[ -n $(grep "rdma" /proc/interrupts) ]] && echo 4 > /proc/irq/$(awk -F":" "/rdma/ {print \$1}" < /proc/interrupts | sed 's/\ //g')/smp_affinity_list
 			[[ -n $(grep "osd-vsync" /proc/interrupts) ]] && echo 5 > /proc/irq/$(awk -F":" "/ osd-vsync/ {print \$1}" < /proc/interrupts | sed 's/\ //g')/smp_affinity_list
 
