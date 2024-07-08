@@ -1,0 +1,73 @@
+name: Update Tools in Scripts
+
+permissions:
+  contents: write
+  pull-requests: write
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - 'test-workflow-update-oras'
+
+  schedule:
+    - cron: '0 3 16 * *' # Run monthly at 03:00 AM, on the 16th day of the month
+
+jobs:
+  update-oras-version:
+    name: Update ORAS version
+    runs-on: ubuntu-latest
+
+    env:
+      REPO_NAME: oras-project/oras
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get current ORAS version
+        id: get-version-current
+        run: |
+          version_current=$(grep -Po '(?<=ORAS_VERSION=\${ORAS_VERSION:-)[0-9.]+(?=})' lib/functions/general/oci-oras.sh)
+          echo "version_current=$version_current" >> $GITHUB_OUTPUT
+
+      - name: Get latest ORAS version
+        id: get-version-latest
+        # Multi-line string for changelog, see https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
+        run: |
+          version_latest=$(curl --silent "https://api.github.com/oras-project/oras/releases/latest" | jq -r .tag_name)
+          version_latest=${version_latest#v} # Removing the 'v' prefix since the script uses only plain numbers
+          changelog=$(curl --silent "https://api.github.com/repos/oras-project/oras/releases/latest" | jq -r .body)
+          echo "version_latest=$version_latest" >> $GITHUB_OUTPUT
+          {
+            echo "CHANGE_LOG<<EOFF"
+            curl --silent "https://api.github.com/repos/oras-project/oras/releases/latest" | jq -r .body | sed -E 's/(#([0-9]+))/oras-project\/oras\1/g' # The 'sed' replaces "#123" with "username/repo#123" to prevent auto-linking to own repo
+            echo "EOFF"
+          } >> "$GITHUB_ENV"
+
+      - name: Update ORAS_VERSION in script
+        run: |
+          version_latest=${{ steps.get-version-latest.outputs.version_latest }}
+          sed -i "s/ORAS_VERSION=\${ORAS_VERSION:-[0-9.]*}/ORAS_VERSION=\${ORAS_VERSION:-$version_latest}/g" lib/functions/general/oci-oras.sh
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Update `ORAS_VERSION` to ${{ steps.get-version-latest.outputs.version_latest }}"
+          branch: update-oras-version-${{ steps.get-version-latest.outputs.version_latest }}
+          title: "Bump `ORAS_VERSION` from ${{ steps.get-version-current.outputs.version_current }} to ${{ steps.get-version-latest.outputs.version_latest }}"
+          body: |
+            Bumps `ORAS_VERSION` from ${{ steps.get-version-current.outputs.version_current }} to ${{ steps.get-version-latest.outputs.version_latest }}.
+
+            <details><summary><b>Release notes</b></summary>
+            <blockquote>
+
+            ${{ env.CHANGE_LOG }}
+
+            </blockquote>
+            </details>
+
+            For more details, see the [release page](https://github.com/oras-project/oras/releases/tag/v${{ steps.get-version-latest.outputs.version_latest }}).
+          labels: update, automated pr
