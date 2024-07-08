@@ -1,0 +1,40 @@
+name: Update ORAS Version
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - 'test-workflow-update-oras'
+
+  schedule:
+    - cron: '0 3 14 * *' # Run at 03:00 AM, every 14 days
+
+jobs:
+  update-oras-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Get latest ORAS version
+        id: get-latest-oras
+        run: |
+          latest_version=$(curl --silent "https://api.github.com/repos/oras-project/oras/releases/latest" | jq -r .tag_name)
+          echo "::set-output name=version::$latest_version"
+
+      - name: Update ORAS_VERSION in script
+        run: |
+          latest_version=${{ steps.get-latest-oras.outputs.version }}
+          sed -i "s/ORAS_VERSION=\${ORAS_VERSION:-[0-9.]*}/ORAS_VERSION=\${ORAS_VERSION:-$latest_version}/g" lib/functions/general/oci-oras.sh
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Update ORAS_VERSION to ${{ steps.get-latest-oras.outputs.version }}"
+          branch: update-oras-version-${{ steps.get-latest-oras.outputs.version }}
+          title: "Update ORAS_VERSION to ${{ steps.get-latest-oras.outputs.version }}"
+          body: "This PR updates ORAS_VERSION to ${{ steps.get-latest-oras.outputs.version }}"
+          labels: update, automated pr
